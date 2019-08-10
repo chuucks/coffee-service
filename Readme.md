@@ -28,6 +28,11 @@
 * At K8s folder, execute: `skaffold dev`
 * Press `Cmmnd + C` to finish dev delploy
 
+## Remote debugging with K8s
+* Create a new debug profile with `remote` option
+* Attach it to port 5005 with default idea configs
+* Add some brakepoints and start debugging
+
 ## Contact:
 * carlos.salazar@codesolt.com
 * @chuucksc
