@@ -1,5 +1,5 @@
 # Coffe Service ☕️
-## Spring Boot with Mongo DB and support for Docker compose and K8s
+## Spring Boot with Mongo DB and support for Docker compose and K8s 🤓
 
 ### Run locally:
 * Select the embbeded Mongo DB at build.gradle
@@ -33,8 +33,10 @@
 * Attach it to port 5005 with default idea configs
 * Add some brakepoints and start debugging
 
-## Contact:
+## Contact 📩
 * carlos.salazar@codesolt.com
 * @chuucksc
 * https://carlos-salazar.com/
 * https://codesolt.com/
+
+Thanks for reading 👍🏾
