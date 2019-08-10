@@ -1,0 +1,13 @@
+version: '3'
+
+# Before:
+# './gradlew jibDockerBuild' at project directory
+
+services:
+  spring-webflux:
+    container_name: coffee-service
+    image: codesolt/boot-mongo:0.0.1
+    ports:
+      - 8080:8080
+      - 5005:5005
+    restart: on-failure
