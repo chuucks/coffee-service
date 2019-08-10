@@ -1,13 +1,21 @@
-version: '3'
+version: '3.1'
 
-# Before:
+# Run previously:
+# `docker pull mongo`
 # './gradlew jibDockerBuild' at project directory
 
 services:
-  spring-webflux:
-    container_name: coffee-service
+  mongo:
+    container_name: coffee-mongo
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+  boot:
+    container_name: coffe-boot
     image: codesolt/boot-mongo:0.0.1
+    depends_on:
+      - mongo
     ports:
       - 8080:8080
-      - 5005:5005
     restart: on-failure

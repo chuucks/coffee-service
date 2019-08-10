@@ -1,0 +1,6 @@
+spring:
+# Comment for local dev:
+  data:
+    mongodb:
+      port: 27017
+      host: mongo
