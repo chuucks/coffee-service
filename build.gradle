@@ -1,6 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.1.7.RELEASE'
 	id 'java'
+	id 'com.google.cloud.tools.jib' version '1.4.0'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -33,4 +34,19 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+jib {
+	from {
+		image = "openjdk:8-jdk-alpine"
+	}
+
+	to {
+		image= "codesolt/boot-mongo:0.0.1"
+	}
+
+	container {
+		jvmFlags = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005']
+		ports = ['8080','5005']
+	}
 }
