@@ -43,6 +43,12 @@ public class CoffeeService {
         throw new CoffeeNotFoundException("Sorry, we don't have that coffee");
     }
 
+    public Order updateOrder(String orderId, int quantity) {
+        Order order = orderRepository.findById(orderId).get();
+        order.setQuantity(quantity);
+        return orderRepository.save(order);
+    }
+
     public String deleteOrder(String orderId) {
         orderRepository.deleteById(orderId);
         return String.format("Order %s was deleted", orderId);

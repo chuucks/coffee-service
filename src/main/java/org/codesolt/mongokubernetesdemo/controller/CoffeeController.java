@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,6 +39,12 @@ public class CoffeeController {
     public Order createOrder(@PathVariable("name") String coffeeName, @PathVariable("quantity") int quantity) {
         log.info(String.format("POST CoffeeController createOrder with coffeeName: %s, and quantity: %d", coffeeName, quantity));
         return coffeeService.createOrder(coffeeName, quantity);
+    }
+
+    @PutMapping("/order/{orderId}/{quantity}")
+    public Order updateOrder(@PathVariable("orderId") String orderId, @PathVariable("quantity") int quantity) {
+        log.info(String.format("PUT CoffeeController updateOrder with orderId: %s, and quantity: %d", orderId, quantity));
+        return coffeeService.updateOrder(orderId, quantity);
     }
 
     @DeleteMapping("/order/{orderId}")
