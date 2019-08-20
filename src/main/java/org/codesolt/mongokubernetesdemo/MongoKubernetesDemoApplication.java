@@ -7,9 +7,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @SpringBootApplication
 @EnableMongoRepositories
 public class MongoKubernetesDemoApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(MongoKubernetesDemoApplication.class, args);
 	}
-
 }

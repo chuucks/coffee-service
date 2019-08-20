@@ -12,5 +12,4 @@ public class MongoKubernetesDemoApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
 }
