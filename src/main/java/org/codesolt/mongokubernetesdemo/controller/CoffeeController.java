@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -30,25 +33,25 @@ public class CoffeeController {
     }
 
     @GetMapping("/coffee/{name}")
-    public Coffee getCoffeeInfo(@PathVariable("name") String coffeeName) {
+    public Coffee getCoffeeInfo(@PathVariable("name") @NotBlank String coffeeName) {
         log.info(String.format("GET CoffeeController getCoffeeInfo with coffeeName: %s", coffeeName));
         return coffeeService.getCoffeeInfo(coffeeName);
     }
 
     @PostMapping("/order/{name}/{quantity}")
-    public Order createOrder(@PathVariable("name") String coffeeName, @PathVariable("quantity") int quantity) {
+    public Order createOrder(@PathVariable("name") @NotBlank String coffeeName, @PathVariable("quantity") @Min(1) int quantity) {
         log.info(String.format("POST CoffeeController createOrder with coffeeName: %s, and quantity: %d", coffeeName, quantity));
         return coffeeService.createOrder(coffeeName, quantity);
     }
 
     @PutMapping("/order/{orderId}/{quantity}")
-    public Order updateOrder(@PathVariable("orderId") String orderId, @PathVariable("quantity") int quantity) {
+    public Order updateOrder(@PathVariable("orderId") @NotBlank String orderId, @PathVariable("quantity") @Min(1) int quantity) {
         log.info(String.format("PUT CoffeeController updateOrder with orderId: %s, and quantity: %d", orderId, quantity));
         return coffeeService.updateOrder(orderId, quantity);
     }
 
     @DeleteMapping("/order/{orderId}")
-    public String deleteOrder(@PathVariable("orderId") String orderId) {
+    public String deleteOrder(@PathVariable("orderId") @NotBlank String orderId) {
         log.info(String.format("DELETE CoffeeController deleteOrder with orderId: %s", orderId));
         return coffeeService.deleteOrder(orderId);
     }

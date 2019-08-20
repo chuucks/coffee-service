@@ -26,21 +26,22 @@ public class CoffeeService {
     }
 
     public Coffee getCoffeeInfo(String coffeeName) {
-        return coffeeRepository.findByName(coffeeName);
+        Coffee coffee = coffeeRepository.findByName(coffeeName);
+        if(coffee != null) {
+            return coffee;
+        }
+        log.severe(String.format("Coffee requested: %s, not found", coffeeName));
+        throw new CoffeeNotFoundException("Sorry, we don't have that coffee");
     }
 
     public Order createOrder(String coffeeName, int quantity) {
         Coffee coffee = getCoffeeInfo(coffeeName);
-        if(coffee != null) {
-            return orderRepository.save(
-                    Order.builder()
-                        .coffee(coffee)
-                        .quantity(quantity)
-                        .total(coffee.getPrice() * quantity)
-                        .build());
-        }
-        log.severe(String.format("Coffee requested: %s, not found", coffeeName));
-        throw new CoffeeNotFoundException("Sorry, we don't have that coffee");
+        return orderRepository.save(
+            Order.builder()
+                .coffee(coffee)
+                .quantity(quantity)
+                .total(coffee.getPrice() * quantity)
+                .build());
     }
 
     public Order updateOrder(String orderId, int quantity) {
