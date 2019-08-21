@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: prod
 # Comment for local dev:
 #  data:
 #    mongodb:

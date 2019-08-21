@@ -5,6 +5,8 @@ import org.codesolt.mongokubernetesdemo.model.Coffee;
 import org.codesolt.mongokubernetesdemo.model.Order;
 import org.codesolt.mongokubernetesdemo.service.CoffeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,9 +41,11 @@ public class CoffeeController {
     }
 
     @PostMapping("/order/{name}/{quantity}")
-    public Order createOrder(@PathVariable("name") @NotBlank String coffeeName, @PathVariable("quantity") @Min(1) int quantity) {
+    public ResponseEntity<Order> createOrder(@PathVariable("name") @NotBlank String coffeeName, @PathVariable("quantity") @Min(1) int quantity) {
         log.info(String.format("POST CoffeeController createOrder with coffeeName: %s, and quantity: %d", coffeeName, quantity));
-        return coffeeService.createOrder(coffeeName, quantity);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(coffeeService.createOrder(coffeeName, quantity));
     }
 
     @PutMapping("/order/{orderId}/{quantity}")
