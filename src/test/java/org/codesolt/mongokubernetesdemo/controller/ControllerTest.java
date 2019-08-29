@@ -85,6 +85,7 @@ public class ControllerTest {
         ResponseEntity<String> createResponse = restTemplate
                 .withBasicAuth("client", "client")
                 .postForEntity(url + "/order/Americano/3", null, String.class);
+
         assertEquals(HttpStatus.CREATED, createResponse.getStatusCode());
 
         Order createOrder = objectMapper.readValue(createResponse.getBody(), Order.class);

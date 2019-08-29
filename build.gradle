@@ -27,7 +27,7 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-webflux'
 
 	// For local dev:
-	implementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+	//implementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
 	//For Testing:
 	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
 

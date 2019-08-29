@@ -15,7 +15,7 @@
 * Ensure delete resources after test with `docker-compose down`
 
 ## Export Docker compose with Kompose
-* At Docker folder, execute: `kompose -f docker-compose.yml`
+* At Docker folder, execute: `kompose convert -f docker-compose.yml`
 * Deploy created resources with `kubectl create -f <definition-to-deploy>`
 * Ensure delete resources after test with `kubecyl delete -f <definition-to-delete>`
 
