@@ -27,7 +27,7 @@ public class CoffeeController {
     @Autowired
     private CoffeeService coffeeService;
 
-    @GetMapping("/coffee/")
+    @GetMapping("/coffee")
     public List<Coffee> getMenu() {
         log.info("GET CoffeeController getMenu");
         return coffeeService.getMenu();

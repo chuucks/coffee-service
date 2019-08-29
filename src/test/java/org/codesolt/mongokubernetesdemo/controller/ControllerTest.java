@@ -1,71 +1,73 @@
 package org.codesolt.mongokubernetesdemo.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import org.codesolt.mongokubernetesdemo.model.Coffee;
 import org.codesolt.mongokubernetesdemo.model.Order;
+import org.codesolt.mongokubernetesdemo.repository.CoffeeRepository;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ControllerTest {
 
+    @LocalServerPort
+    private int port;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    private final String URL = "http://localhost:";
+    private final String PATH = "/api/coffee-service";
+
+    CollectionType coffeeListType =
+            objectMapper.getTypeFactory().constructCollectionType(List.class, Coffee.class);
+
     @Autowired
-    ApplicationContext context;
+    private TestRestTemplate restTemplate;
 
-    private WebTestClient webTestClient;
+    @Test
+    public void getMenuTest() throws IOException {
+        System.out.println(port);
+        ResponseEntity<String> response = restTemplate
+                .withBasicAuth("client", "client")
+                .getForEntity(URL + port + PATH + "/coffee", String.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
 
-    @Before
-    public void setUp() throws Exception {
-
-        webTestClient = WebTestClient
-                .bindToApplicationContext(context)
-                .configureClient()
-                .baseUrl("/api/coffee-service")
-                .build();
+        List<Coffee> coffeeList = objectMapper.readValue(response.getBody(), coffeeListType);
+        assertNotNull(coffeeList);
+        assertEquals(4, coffeeList.size());
+        assertNotNull(coffeeList.get(0).getName());
     }
 
     @Test
-    @WithMockUser(roles = "CLIENT")
-    public void getMenuTest() {
-        webTestClient.get()
-                .uri("/coffee")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .exchange()
-                .expectStatus().isCreated()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBodyList(Coffee.class).hasSize(4);
-    }
+    public void getCoffeeInfoTest() throws IOException {
+        System.out.println(port);
+        ResponseEntity<String> response = restTemplate
+                .withBasicAuth("client", "client")
+                .getForEntity(URL + port + PATH + "/coffee/Americano", String.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
 
-    @Test
-    @WithMockUser(roles = "CLIENT")
-    public void getCoffeeInfoTest() {
-        webTestClient.get()
-                .uri("/coffee/{coffee}", "Americano")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .exchange()
-                .expectStatus().isCreated()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody(Coffee.class);
+        Coffee coffee = objectMapper.readValue(response.getBody(), Coffee.class);
+        assertNotNull(coffee);
+        assertEquals("Americano", coffee.getName());
     }
-
-    @Test
-    @WithMockUser(roles = "CLIENT")
-    public void createOrderTest() {
-        webTestClient.get()
-                .uri("/order/{name}/{quantity}", "Americano", 3)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .exchange()
-                .expectStatus().isCreated()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody(Order.class);
-    }
-
 }
