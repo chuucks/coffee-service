@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import org.codesolt.mongokubernetesdemo.model.Coffee;
 import org.codesolt.mongokubernetesdemo.model.Order;
-import org.codesolt.mongokubernetesdemo.repository.CoffeeRepository;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +12,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -35,8 +30,7 @@ public class ControllerTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private final String URL = "http://localhost:";
-    private final String PATH = "/api/coffee-service";
+    private String url;
 
     CollectionType coffeeListType =
             objectMapper.getTypeFactory().constructCollectionType(List.class, Coffee.class);
@@ -44,12 +38,16 @@ public class ControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    @Before
+    public void setBaseURL() {
+        url = "http://localhost:" + port + "/api/coffee-service";
+    }
+
     @Test
     public void getMenuTest() throws IOException {
-        System.out.println(port);
         ResponseEntity<String> response = restTemplate
                 .withBasicAuth("client", "client")
-                .getForEntity(URL + port + PATH + "/coffee", String.class);
+                .getForEntity(url + "/coffee", String.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
         List<Coffee> coffeeList = objectMapper.readValue(response.getBody(), coffeeListType);
@@ -60,14 +58,44 @@ public class ControllerTest {
 
     @Test
     public void getCoffeeInfoTest() throws IOException {
-        System.out.println(port);
         ResponseEntity<String> response = restTemplate
                 .withBasicAuth("client", "client")
-                .getForEntity(URL + port + PATH + "/coffee/Americano", String.class);
+                .getForEntity(url + "/coffee/Americano", String.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
         Coffee coffee = objectMapper.readValue(response.getBody(), Coffee.class);
         assertNotNull(coffee);
         assertEquals("Americano", coffee.getName());
+    }
+
+    @Test
+    public void createOrderTest() throws IOException {
+        ResponseEntity<String> createResponse = restTemplate
+                .withBasicAuth("client", "client")
+                .postForEntity(url + "/order/Americano/3", null, String.class);
+        assertEquals(HttpStatus.CREATED, createResponse.getStatusCode());
+
+        Order createOrder = objectMapper.readValue(createResponse.getBody(), Order.class);
+        assertNotNull(createOrder);
+        assertEquals((Double) 6.0, createOrder.getTotal());
+    }
+
+    @Test
+    public void readOrderTest() throws IOException {
+        ResponseEntity<String> createResponse = restTemplate
+                .withBasicAuth("client", "client")
+                .postForEntity(url + "/order/Americano/3", null, String.class);
+        assertEquals(HttpStatus.CREATED, createResponse.getStatusCode());
+
+        Order createOrder = objectMapper.readValue(createResponse.getBody(), Order.class);
+
+        ResponseEntity<String> readResponse = restTemplate
+                .withBasicAuth("client", "client")
+                .getForEntity(url + "/order/" + createOrder.getId(), String.class);
+        assertEquals(HttpStatus.OK, readResponse.getStatusCode());
+
+        Order readOrder = objectMapper.readValue(createResponse.getBody(), Order.class);
+        assertNotNull(readOrder);
+        assertEquals(createOrder, readOrder);
     }
 }

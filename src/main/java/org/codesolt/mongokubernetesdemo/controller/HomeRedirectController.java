@@ -13,5 +13,4 @@ public class HomeRedirectController {
     public ModelAndView swaggerUi() {
         return new ModelAndView("redirect:" + "/swagger-ui.html");
     }
-
 }
