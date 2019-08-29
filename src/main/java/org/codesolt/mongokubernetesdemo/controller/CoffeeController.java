@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -38,6 +37,12 @@ public class CoffeeController {
     public Coffee getCoffeeInfo(@PathVariable("name") @NotBlank String coffeeName) {
         log.info(String.format("GET CoffeeController getCoffeeInfo with coffeeName: %s", coffeeName));
         return coffeeService.getCoffeeInfo(coffeeName);
+    }
+
+    @GetMapping("/order/{order}")
+    public Order getOrderInfo(@PathVariable("order") @NotBlank String orderId) {
+        log.info(String.format("GET CoffeeController getOrderInfo with coffeeName: %s", orderId));
+        return coffeeService.getOrder(orderId);
     }
 
     @PostMapping("/order/{name}/{quantity}")

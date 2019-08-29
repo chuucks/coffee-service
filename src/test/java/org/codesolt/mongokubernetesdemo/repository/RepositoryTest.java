@@ -3,7 +3,6 @@ package org.codesolt.mongokubernetesdemo.repository;
 import org.codesolt.mongokubernetesdemo.model.Coffee;
 import org.codesolt.mongokubernetesdemo.model.Order;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -65,7 +64,32 @@ public class RepositoryTest {
     }
 
     @Test
-    public void saveUpdateDeleteOrderTest() {
+    public void saveOrderTest() {
+        Order order = orderRepository.save(
+                Order.builder()
+                        .coffee(americano)
+                        .quantity(2)
+                        .total(americano.getPrice() * 2)
+                        .build());
+        assertNotNull(order);
+        assertEquals((Double) 4.0, order.getTotal());
+    }
+
+    @Test
+    public void findOrderByIdTest() {
+        Order order = orderRepository.save(
+                Order.builder()
+                        .coffee(americano)
+                        .quantity(2)
+                        .total(americano.getPrice() * 2)
+                        .build());
+        Order retrived = orderRepository.getOrderById(order.getId());
+        assertNotNull(retrived);
+        assertEquals(order, retrived);
+    }
+
+    @Test
+    public void updateOrderTest() {
         Order order = orderRepository.save(
                 Order.builder()
                         .coffee(americano)
@@ -82,7 +106,18 @@ public class RepositoryTest {
         order = orderRepository.save(order);
         assertEquals(3, order.getQuantity());
         assertEquals(new Double(6.0), order.getTotal());
+    }
 
-        orderRepository.delete(order);
+    @Test(expected = NoSuchElementException.class)
+    public void deleteOrderTest() {
+        Order order = orderRepository.save(
+                Order.builder()
+                        .coffee(americano)
+                        .quantity(2)
+                        .total(americano.getPrice() * 2)
+                        .build());
+
+        orderRepository.deleteById(order.getId());
+        orderRepository.findById(order.getId()).get();
     }
 }
