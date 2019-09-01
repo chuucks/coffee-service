@@ -30,7 +30,7 @@ public class RepositoryTest {
 
     @Before
     public void loadTestingData() {
-        List<Coffee> coffeList;
+        List<Coffee> coffeeList;
         americano = Coffee.builder()
             .name("Americano")
             .description("Hot water to a shot of espresso coffee.")
@@ -44,8 +44,8 @@ public class RepositoryTest {
                 .build();
 
         coffeeRepository.deleteAll();
-        coffeList = Arrays.asList(americano, cappuccino);
-        coffeeRepository.saveAll(coffeList);
+        coffeeList = Arrays.asList(americano, cappuccino);
+        coffeeRepository.saveAll(coffeeList);
     }
 
     @Test
