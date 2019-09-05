@@ -39,6 +39,16 @@
 * Attach it to port 5005 with default idea configs
 * Add some brakepoints and start debugging
 
+### Useful commands for Docker Swarm:
+* docker-machine create --driver virtualbox swarm-vm1
+* docker-machine ssh swarm-vm1
+* docker-machine ip swarm-vm1
+* docker swarm init --advertise-addr 192.168.99.102
+* docker service create --name registry --publish published=5000,target=5000 registry:2
+* eval $(docker-machine env swarm-vm1)
+* docker stack deploy --compose-file docker-compose.yml spring-mongo-app
+* mkdir -p ~/docker/volumes/mongodb
+
 ## Contact 📩
 * carlos.salazar@codesolt.com
 * @chuucksc

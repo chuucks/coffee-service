@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.7'
 
 # Run previously:
 # `docker pull mongo`
@@ -6,13 +6,17 @@ version: '3.1'
 
 services:
   mongo:
-    container_name: coffee-mongo
+    #container_name: coffee-mongo
     image: mongo:latest
     restart: always
     ports:
       - 27017:27017
+    hostname: mongo
+    networks:
+      - overlay
+
   boot:
-    container_name: coffe-boot
+    #container_name: coffe-boot
     image: codesolt/boot-mongo:0.0.1
     depends_on:
       - mongo
@@ -20,3 +24,9 @@ services:
       - 8080:8080
       - 5005:5005
     restart: on-failure
+    networks:
+      - overlay
+
+networks:
+  overlay:
+    driver: bridge
