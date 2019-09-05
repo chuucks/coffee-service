@@ -7,6 +7,12 @@
 * Run from idea or from gradle: `./gradlew bootRun`
 * See swagger UI at: `localhost:8080`
 
+### Build image from Dockerfile
+* Build the image: `docker image build -t codesolt/boot-mongo:0.0.1 .`
+* Ensure the image by running it as: 
+`docker container run --name mongoapp -p 8080:8080 -d codesolt/boot-mongo:0.0.1`
+* Kill the image: `docker rm -f <container-id>` 
+
 ### Run with Docker compose
 * Same Mongo config as locally
 * Pull Mongo official image: `docker pull mongo`
