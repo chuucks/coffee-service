@@ -39,15 +39,27 @@
 * Attach it to port 5005 with default idea configs
 * Add some brakepoints and start debugging
 
-### Useful commands for Docker Swarm:
-* docker-machine create --driver virtualbox swarm-vm1
-* docker-machine ssh swarm-vm1
-* docker-machine ip swarm-vm1
-* docker swarm init --advertise-addr 192.168.99.102
-* docker service create --name registry --publish published=5000,target=5000 registry:2
-* eval $(docker-machine env swarm-vm1)
-* docker stack deploy --compose-file docker-compose.yml spring-mongo-app
-* mkdir -p ~/docker/volumes/mongodb
+### Socker Swarm
+* Create VM machines with `docker-machine` command (have a Virtual Box app running) 
+docker-machine create --driver virtualbox <vm-name>
+* Get the IP for the node of the cluster that will be the lead manager:
+`docker-machine ip <vm-name>`
+* Connect to your designed lead manager node with:
+`docker-machine ssh <vm-name>`
+* Init the Docker Swarm cluster with the following command:
+`docker swarm init --advertise-addr <ip-vm-swarm>`
+* See the nodes on your cluster (from a manager) with:
+`docker node ls`
+* Init a registry on your cluster 
+`docker service create --name registry --publish published=5000,target=5000 registry:2`
+* Run docker commands from your local on the swarm cluster with:
+ `eval $(docker-machine env <vm-swarm>)`
+* Push your definition of compose to the cluster with:
+`docker-compose push`
+* Deploy your services from Docker Compose file with Stack command:
+ `docker stack deploy --compose-file docker-compose.yml <stack-name>`
+* If needed, create the default folder for the DB you are using (preferly use a volume):
+ `mkdir -p ~/docker/volumes/mongodb`
 
 ## Contact 📩
 * carlos.salazar@codesolt.com
