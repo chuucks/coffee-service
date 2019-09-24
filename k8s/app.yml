@@ -16,6 +16,13 @@ spec:
         - name: coffe-spring
           image: codesolt/boot-mongo:0.0.1
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
           ports:
             - containerPort: 8080
               name: "http"
