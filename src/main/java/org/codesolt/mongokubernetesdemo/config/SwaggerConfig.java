@@ -29,7 +29,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Codesolt Coffee Service")
-                .description("REST API for determine Cryptocurrency relevance. Consumes BITSO API")
+                .description("REST API for serving coffee orders")
                 .version("1.0.0")
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")

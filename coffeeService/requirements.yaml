@@ -1,0 +1,7 @@
+dependencies:
+  - name: mongodb
+    version: 4.0.12
+    repository: https://github.com/helm/charts/tree/master/stable/mongodb
+    condition: usePassword.false
+    tags:
+      - mongo-db
